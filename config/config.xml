@@ -1,0 +1,16 @@
+<config>
+	<header>
+		<item name='website_title'>WinterBreeze Template</item>
+	</header>
+	<css>
+		<item>style.css</item>
+	</css>
+	<js>
+		<item>http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js</item>
+		<item>test.js</item>
+	</js>
+	<footer>
+		<item name='copyright_holder'>Cedric Delalande</item>
+		<item name='date'>2011-2012</item>
+	</footer>
+</config>
