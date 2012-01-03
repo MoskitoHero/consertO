@@ -4,7 +4,7 @@
 */
 namespace root;
 
-class defaultControllerClass extends \base\ControllerClass
+class defaultController extends \base\Controller
 {
 	
 	function index()
