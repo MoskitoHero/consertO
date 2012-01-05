@@ -1,6 +1,12 @@
 {
 	"header": {
-	 	"website_title": "Skin&Bones"
+	 	"website_title": "Skin&Bones",
+		"website_url": "http://localhost/~ced/Skin-Bones/",
+		"menu": [
+		 	{"name": "Accueil", "link": ""},
+			{"name": "Blog", "link": "blog/"},
+			{"name": "Admin", "link": "admin/"}
+		]
 	},
 	"css": [
 			{ "source": "style.css" }

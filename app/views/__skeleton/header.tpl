@@ -14,10 +14,14 @@
 <div id="wrapper">
 <header>
 	<div id="header_img">
-	<img src="http://localhost/~ced/Skin-Bones/assets/images/skin-bones-header-logo.png"/>
+		<a href="{{website_url}}">
+			<img src="http://localhost/~ced/Skin-Bones/assets/images/skin-bones-header-logo.png"/>
+		</a>
 	</div>
 	<div id="menu">
-	Menu
+		{% for m in menu %}
+		<a href="{{website_url}}{{m.link}}">{{m.name}}</a>
+		{% endfor %}
 	</div>
 	<div id="loginout">
 	{% if logout == "true" %}
