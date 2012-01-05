@@ -1,6 +1,6 @@
 {
 	"header": {
-	 	"website_title": "WinterBreeze Template"
+	 	"website_title": "Skin&Bones"
 	},
 	"css": [
 			{ "source": "style.css" }
@@ -11,6 +11,16 @@
 	],
 	"footer": {
 	 	"copyright_holder": "Cedric Delalande",
+		"copyright_holder_url": "http://cedric.delalande.me/",
 		"date": "2011-2012" 
+	},
+	"global": {
+		"debug": true,
+		"database": {
+			"server": "localhost",
+			"dbname": "test",
+			"user": "skull",
+			"pass": "secret"
+		}
 	}
 }

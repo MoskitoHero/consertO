@@ -14,6 +14,7 @@ class Router
 	public $access_lvl; //string
 	private $ssl; // boolean
 	public $status;
+	public $method; // GET, POST, PUT, DELETE
 	
 	function __construct()
 	{
@@ -22,6 +23,7 @@ class Router
 		$this->jsonConfig = json_decode($json);
 		$base = str_replace('index.php','',$_SERVER['PHP_SELF']);
 		$str_path = str_replace($base,'',$_SERVER['REQUEST_URI']);
+		$str_path = str_replace('?' . $_SERVER['REDIRECT_QUERY_STRING'],'',$str_path);
 		$this->current = explode('/',$str_path);
 		$this->ssl = false;
 		foreach ($this->jsonConfig->routes as $r=>$v){
@@ -37,15 +39,34 @@ class Router
 		}
 		$this->sslRedirect();
 		$this->status = found;
+		$this->parseURL();
+		return true;
+	}
+	
+	function parseURL() {
 		$this->controller = ($this->current[0]=="")?"default":$this->current[0];
 		array_shift($this->current);
 		$this->action = ($this->current[0]=="")?"index":$this->current[0];
 		array_shift($this->current);
 		$this->id = ($this->current[0]=="")?"":$this->current[0];
-		$this->params = $this->current;
-		return true;
+		$this->params = array_merge($this->current, $this->parseHttpMethod());
 	}
 	
+	function parseHttpMethod() {
+		$this->method = $_SERVER["REQUEST_METHOD"];
+		switch($this->method) {
+			case "GET":
+				$return = $_GET;
+				break;
+			case "POST":
+				$return = $_POST;
+				break;
+			default:
+				$return = array();
+				break;
+		}
+		return $return;
+	}
 	
 	function debugRoute(){
 		return $this;

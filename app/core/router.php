@@ -1,14 +1,16 @@
 <?php
+// Init Classes
 $appRouter = new Router();
 $auth = new Auth();
+$link = new Link();
+
+// Check user Auth
 $auth->getUserRights($appRouter->access_lvl);
-if($appRouter->controller == "logout") {
-	$auth->logout();
-}
-if($appRouter->controller == "login") {
-	$auth->login();
-}
+
+// Go !!!
 $appRouter->callUpRoute();
+
+// Debug information
 if ($debug) {
 	$debug_dump['Router'] = $appRouter->debugRoute();
 }

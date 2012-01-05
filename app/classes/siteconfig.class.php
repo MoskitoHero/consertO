@@ -6,6 +6,8 @@
 class siteConfig
 {
 	private $mainConfig; // object
+	private $jsonConfig;
+	private $globalConfig;
 	
 	function __construct()
 	{
@@ -20,7 +22,15 @@ class siteConfig
 		}
 		$array['css'] = $this->getCssConfig();
 		$array['js'] = $this->getJsConfig();
-		//print_r($array);
+		if (\Auth::sessionStarted()) {
+			$array['logout'] = "true";
+			$array['logout_link'] = Link::build('logout');
+			$array['login'] = "false";
+		} else {
+			$array['logout'] = "false";
+			$array['login_link'] = Link::build('login');
+			$array['login'] = "true";
+		}
 		return $array;
 	}
 	
@@ -51,5 +61,17 @@ class siteConfig
 		}
 		return $string;
 	}
+	
+	function getGlobalConfig(){
+		if (!isset($this->globalConfig)) {
+			foreach ($this->jsonConfig->global as $k => $v){
+				$array[$k] = $v;
+			}
+			$this->globalConfig = $array;
+		}
+		return $this->globalConfig;
+	}
+	
+	//function getGlobalConfig()
 }
 ?>

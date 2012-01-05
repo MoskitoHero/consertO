@@ -6,7 +6,7 @@
 class Auth
 {
 	
-	function getStatus()
+	function sessionStarted()
 	{
 		//var_dump($_SESSION);
 		if (!$_SESSION["session_exists"]){
@@ -25,21 +25,19 @@ class Auth
 	function getUserRights($access_lvl) {
 		if ($access_lvl > 0) {
 			// Visitor is trying to access a restricted area
-			if ( $this->getStatus() ) {
+			if ( $this->sessionStarted() ) {
 				// Visitor is a user
 				// Let's check he's allowed to access this area
 				$u_lvl = $_SESSION['u_lvl'];
 				$id = $_SESSION['u_id'];
 				$user = R::load('user', $id);
-				if (!$user->id) {
-					//echo "User not found";
+				if (!$user->id) { // user not found
 					$this->driveOut('');
-				} else {
-					if ($user->lvl < $access_lvl) {
-						//echo "User has no rights to see this";
+				} else { 
+					if ($user->lvl < $access_lvl) { // user has no rights to see this
 						$this->driveOut('');
 					} else {
-						//echo "Cool";
+						// User can access this
 					}
 				}
 			} else {
@@ -50,15 +48,12 @@ class Auth
 	}
 	
 	function driveOut($path="") {
+		//header("method:GET");
 		header("location:" . APP_ROOT_URL . $path);
 	}
 	
 	function destroy() {
-		if ($_SESSION["pid"]){
-			return session_destroy();
-		} else {
-			return false;
-		}
+		return session_destroy();
 	}
 	
 	function logout() {
@@ -66,9 +61,10 @@ class Auth
 		$this->driveOut();
 	}
 	
-	function login() {
+	function login($u_id, $u_lvl=0) {
 		$_SESSION["session_exists"] = true;
-		$this->driveOut("admin/");
+		$_SESSION["u_id"] = $u_id;
+		$_SESSION["u_lvl"] = $u_lvl;
 	}
 }
 ?>

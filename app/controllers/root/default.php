@@ -11,6 +11,7 @@ class defaultController extends \base\Controller
 	{
 		return array('name' => 'joe', 'chien'=> 'doberman');
 	}
+	
 }
 
 ?>

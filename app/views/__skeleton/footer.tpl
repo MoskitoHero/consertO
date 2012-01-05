@@ -1,6 +1,6 @@
 </div>
         <footer>
-                <p>Copyright {{date}} {{copyright_holder}} <img src="http://localhost/~ced/Skin-Bones/assets/images/skull.png"></p>
+                <p>Copyright {{date}} <a href="{{copyright_holder_url}}">{{copyright_holder}}</a> <img src="http://localhost/~ced/Skin-Bones/assets/images/skull.png" align="middle"></p>
         </footer>
 </div id="wrapper">
 </body>
