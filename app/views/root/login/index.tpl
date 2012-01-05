@@ -1,6 +1,6 @@
 {% import "__helpers/form.helper.html" as form %}
 
-<form action="{{form_url}}" method="POST">
+<div id="login" class="rounded-corners-10"><form action="{{form_url}}" method="POST">
 <dl>
     <dt>Username</dt>
     <dd>{{ form.input('username') }}</dd>
@@ -9,3 +9,4 @@
     <dd>{{ form.input('submit', 'login', 'submit') }}</dd>
 </dl>
 </form>
+</div>

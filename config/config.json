@@ -7,6 +7,7 @@
 	],
 	"js": [
 		{ "source": "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" },
+		{ "source": "jquery.noisy.min.js" },
 		{ "source": "test.js" }
 	],
 	"footer": {
