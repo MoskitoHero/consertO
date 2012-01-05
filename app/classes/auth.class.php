@@ -42,7 +42,7 @@ class Auth
 				}
 			} else {
 				// Let's send the visitor to the login form
-				$this->driveOut(''); //$this->driveOut('login/');
+				$this->driveOut('login'); //$this->driveOut('login/');
 			}
 		}
 	}
