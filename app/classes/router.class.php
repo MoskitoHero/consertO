@@ -17,16 +17,18 @@ class Router
 	
 	function __construct()
 	{
-		$this->config = simplexml_load_file(APP_ROOT_DIR .'/config/routes.xml');
+		//$this->config = simplexml_load_file(APP_ROOT_DIR .'/config/routes.xml');
+		$json = file_get_contents(APP_ROOT_DIR .'/config/routes.json');
+		$this->jsonConfig = json_decode($json);
 		$base = str_replace('index.php','',$_SERVER['PHP_SELF']);
 		$str_path = str_replace($base,'',$_SERVER['REQUEST_URI']);
 		$this->current = explode('/',$str_path);
 		$this->ssl = false;
-		foreach ($this->config->route as $r=>$v){
+		foreach ($this->jsonConfig->routes as $r=>$v){
 			if ($this->current[0] == $v->path){
 				$this->module = $v->name;
 				$this->access_lvl = $v->security->access_lvl;
-				$this->ssl = ($v->security->ssl=="true")?true:false;
+				$this->ssl = $v->security->ssl;
 				array_shift($this->current);
 			}
 		}
@@ -50,7 +52,7 @@ class Router
 	}
 	
 	private function printError($msg) {
-		echo "<div class='WinterBreezeFatal' style='color:red'>FATAL ERROR: <br/>";
+		echo "<div class='SkinAndBonesFatal' style='color:red'>FATAL ERROR: <br/>";
 		echo "" . $msg . "</div>";
 	}
 	

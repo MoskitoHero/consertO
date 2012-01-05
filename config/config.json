@@ -1,0 +1,16 @@
+{
+	"header": {
+	 	"website_title": "WinterBreeze Template"
+	},
+	"css": [
+			{ "source": "style.css" }
+	],
+	"js": [
+		{ "source": "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" },
+		{ "source": "test.js" }
+	],
+	"footer": {
+	 	"copyright_holder": "Cedric Delalande",
+		"date": "2011-2012" 
+	}
+}

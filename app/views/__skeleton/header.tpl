@@ -3,12 +3,16 @@
 <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>{{website_title}}</title>
-{% for item in css %}
-<link type="text/css" rel="stylesheet" media="screen" href="{{item}}"></link>
+{% for source in css %}
+<link type="text/css" rel="stylesheet" media="screen" href="{{source}}"></link>
 {% endfor %}
-{% for item in js %}
-<script type="text/javascript" charset="utf-8" src="{{item}}"></script>
+{% for source in js %}
+<script type="text/javascript" charset="utf-8" src="{{source}}"></script>
 {% endfor %}
 </head>
 <body>
-<header>Header of {{website_title}}</header>
+<div id="wrapper">
+<header>
+	<img src="http://localhost/~ced/Skin-Bones/assets/images/skin-bones-header-logo.png"/>
+</header>
+<div id="main">

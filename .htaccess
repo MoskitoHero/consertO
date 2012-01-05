@@ -1,5 +1,5 @@
 Options +FollowSymLinks
 RewriteEngine on
-RewriteBase /~ced/WinterBreeze
+RewriteBase /~ced/Skin-Bones
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php [QSA,L]

@@ -2,54 +2,54 @@
 /**
 * 
 */
+
 class siteConfig
 {
 	private $mainConfig; // object
 	
 	function __construct()
 	{
-		$this->mainConfig = simplexml_load_file(APP_ROOT_DIR .'/config/config.xml');
+		//$this->mainConfig = simplexml_load_file(APP_ROOT_DIR .'/config/config.xml');
+		$json = file_get_contents(APP_ROOT_DIR .'/config/config.json');
+		$this->jsonConfig = json_decode($json);
 	}
 	
 	function getHeaderConfig(){
-		foreach ($this->mainConfig->header->item as $k => $v){
-			$attr_name = (string)$v->attributes()->name;
-			$array[$attr_name] = $v;
+		foreach ($this->jsonConfig->header as $k => $v){
+			$array[$k] = $v;
 		}
-		$array['css']=$this->getCssConfig();
-		$array['js']=$this->getJsConfig();
+		$array['css'] = $this->getCssConfig();
+		$array['js'] = $this->getJsConfig();
 		//print_r($array);
 		return $array;
 	}
 	
 	function getFooterConfig(){
-		foreach ($this->mainConfig->footer->item as $k => $v){
-			$attr_name = (string)$v->attributes()->name;
-			$array[$attr_name] = $v;
+		foreach ($this->jsonConfig->footer as $k => $v){
+			$array[$k] = $v;
 		}
 		return $array;
 	}
 	
 	function getCssConfig(){
-		foreach ($this->mainConfig->css->item as $k => $v){
-			$string = (string)$v;
-			if (strstr($string, 'http://') == false ) {
-				$string = APP_ROOT_URL . 'assets/css/' . $string;
-			}
-			$array[] = $string;
+		foreach ($this->jsonConfig->css as $k => $v){
+			$array[] = $this->getAssetURI($v->source, 'css');
 		}
 		return $array;
 	}
 	
 	function getJsConfig(){
-		foreach ($this->mainConfig->js->item as $k => $v){
-			$string = (string)$v;
-			if (strstr($string, 'http://') == false ) {
-				$string = APP_ROOT_URL . 'assets/js/' . $string;
-			}
-			$array[] = $string;
+		foreach ($this->jsonConfig->js as $k => $v){
+			$array[] = $this->getAssetURI($v->source, 'js');
 		}
 		return $array;
+	}
+	
+	private function getAssetURI($string, $type) {
+		if (strstr($string, 'http://') == false ) {
+			$string = APP_ROOT_URL . 'assets/' . $type . '/' . $string;
+		}
+		return $string;
 	}
 }
 ?>
