@@ -71,7 +71,5 @@ class siteConfig
 		}
 		return $this->globalConfig;
 	}
-	
-	//function getGlobalConfig()
 }
 ?>
