@@ -6,7 +6,7 @@
 class Link
 {
 	
-	function build($module=nul, $controller=null, $action=null, $params=array())
+	function build($module=null, $controller=null, $action=null, $params=array())
 	{
 		$return = APP_ROOT_URL;
 		$arr = array($module, $controller, $action);
@@ -18,6 +18,16 @@ class Link
 				$return .= $v . DS;
 			}
 		}
+		return $return;
+	}
+	function buildHtmlLink($text, $options=array(), $module=null, $controller=null, $action=null, $params=array())
+	{
+		$link = $this->build($module, $controller, $action, $params);
+		$opt = "";
+		foreach ( $options as $k => $v ) {
+			$opt .= $k . "=\"" . $v . "\" ";
+		}
+		$return = "<a " . $opt . ">" . $text . "</a>";
 		return $return;
 	}
 }
