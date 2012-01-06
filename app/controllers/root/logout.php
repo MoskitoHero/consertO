@@ -2,15 +2,18 @@
 /**
 * 
 */
-namespace root;
+namespace base\root;
 
 class logoutController extends \base\Controller
 {
+	public $components = array(
+		"base\Auth" => "auth"
+	);
 	
 	function index()
 	{
-		\Auth::destroy();
-		\Auth::driveOut();
+		$this->auth->destroy();
+		$this->auth->driveOut();
 	}
 	
 }

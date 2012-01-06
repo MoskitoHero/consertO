@@ -2,7 +2,7 @@
 /**
 * 
 */
-namespace admin;
+namespace base\admin;
 
 class defaultController extends \base\Controller
 {

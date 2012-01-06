@@ -41,22 +41,23 @@ class loginController extends \base\Controller
 				$all = \R::getAll( 'select * from user WHERE username = ? ', array($params['username']) );
 				if ( !empty($all) ) {
 				$this->session->setVar("notice", "user already exists");
-				return array();
+				$this->auth->driveOut('login/register');
 				} else {
 					unset($params['pass_confirm']);
 					$user = \R::dispense( 'user' );
 					$user->username = $params['username'];
+					$user->email = $params['email'];
 					$user->pass = crypt($params['pass']);
 					$user->lvl = $params['lvl'];
 					$id = \R::store($user);
 					$this->session->setVar("notice", "user account created");
-					return array();
+					$this->auth->driveOut('login');
 				}
 			} else {
 				$this->session->setVar("notice", "passwords don't match or password is too short<br/>"
 										. $this->link->buildHtmlLink("Try again.", array(), 'login', 'register')
 										);
-				return array();
+				$this->auth->driveOut('login/register');
 			}
 	}
 	

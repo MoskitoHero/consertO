@@ -5,7 +5,7 @@
 
 namespace base;
 
-class Auth  extends Main
+class Auth extends Main
 
 {
 	function __construct() {
@@ -14,11 +14,12 @@ class Auth  extends Main
 	
 	function sessionStarted()
 	{
-		//var_dump($_SESSION);
-		if (!$this->session->session_exists){
+		if (!$this->session->var->session_exists){
 			//$this->session->setVar("session_exists",true);
+			//echo "session don't e";
 			return false;
 		} else {
+			//echo "session e";
 			//$this->session->setVar("session_exists",false);
 			return true;
 		}
@@ -32,21 +33,22 @@ class Auth  extends Main
 		if ($access_lvl > 0) {
 			// Visitor is trying to access a restricted area
 			if ( $this->sessionStarted() ) {
-				// Visitor is a user
+				 //echo "Visitor is a user";
 				// Let's check he's allowed to access this area
 				$u_lvl = $this->session->u_lvl;
 				$id = $this->session->u_id;
-				$user = R::load('user', $id);
-				if (!$user->id) { // user not found
+				$user = \R::load('user', $id);
+				if (!$user->id) { //echo  "user not found";
 					$this->driveOut('');
 				} else { 
-					if ($user->lvl < $access_lvl) { // user has no rights to see this
+					if ($user->lvl < $access_lvl) { //echo "user has no rights to see this";
 						$this->driveOut('');
 					} else {
-						// User can access this
+						 //echo "User can access this";
 					}
 				}
 			} else {
+				//echo "not logged in";
 				// Let's send the visitor to the login form
 				$this->driveOut('login'); //$this->driveOut('login/');
 			}
@@ -54,7 +56,6 @@ class Auth  extends Main
 	}
 	
 	function driveOut($path="") {
-		$_SESSION["notice_keep"] = true;
 		header("location:" . APP_ROOT_URL . $path);
 	}
 	
@@ -69,7 +70,7 @@ class Auth  extends Main
 	
 	function login($u_id, $u_lvl=0) {
 		$_SESSION["session_exists"] = true;
-		$this->session->setVar("sesssion_exists",true);
+		$this->session->setVar("session_exists",true);
 		$this->session->setVar("u_lvl",$u_lvl);
 		$this->session->setVar("u_id",$u_id);
 	}

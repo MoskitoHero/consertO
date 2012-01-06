@@ -33,7 +33,3 @@
 	</div>
 	<hr/>
 </header>
-{% if notice %}
-<div id="notice" class="rounded-corners-10">{{notice|raw}}</div>
-{% endif %}
-<div id="main">

@@ -9,5 +9,5 @@
     <dd>{{ form.input('submit', 'login', 'submit') }}</dd>
 </dl>
 </form>
-<div>No account? <a href="{{register_url}}">register today</a></div>
+<div>No account? {{register_link|raw}}</div>
 </div>

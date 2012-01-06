@@ -4,7 +4,7 @@
 */
 namespace base;
 
-class controller extends Main
+class Controller extends Main
 
 {
 	public $status;

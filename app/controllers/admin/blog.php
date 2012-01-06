@@ -2,7 +2,7 @@
 /**
 * 
 */
-namespace admin;
+namespace base\admin;
 
 class blogController extends \base\Controller
 {

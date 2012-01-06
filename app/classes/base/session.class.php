@@ -49,9 +49,9 @@ class Session extends Main
 	}
 	
 	function unsetVar($var) {
-		var_dump($var);
 		if ( isset( $_SESSION[$var] ) ) {
 			unset($_SESSION[$var]);
+			$this->var = $this->getObject();
 			return true;
 		} else {
 			return false;

@@ -97,7 +97,7 @@ class Router extends Main
 		$v_filepath = APP_ROOT_DIR . '/app/views/' . $this->module . '/' . $this->controller . '/' . $this->action . '.tpl';
 		if (file_exists($c_filepath)){
 			require_once($c_filepath);
-			$classname = $this->module . '\\' . $this->controller . 'Controller';
+			$classname = 'base\\' . $this->module . '\\' . $this->controller . 'Controller';
 			$this->c = new $classname();
 			$this->c->loadComponents($this->c->components);
 			$controller_array = call_user_func( array( $this->c, $this->action ), $this->params );
@@ -107,7 +107,11 @@ class Router extends Main
 				$siteConfig = new siteConfig();
 				$loader = new \	Twig_Loader_Filesystem($t_dirpath);
 				$twig = new \Twig_Environment($loader);
+				$tweeg = new \base\Tweeg();
+				$twig->addExtension(new \base\Tweeg());
+				$twig->addFunction('erase_notice', new \Twig_Function_Method($tweeg, 'eraseNotice'));
 				echo $twig->render('__skeleton/header.tpl', $siteConfig->getHeaderConfig());
+				echo $twig->render('__skeleton/notice.tpl', array("notice" =>  $_SESSION["notice"]) );
 				if (!empty($controller_array)){
 					echo $twig->render($t_filename, $controller_array);
 				} else {
@@ -129,8 +133,8 @@ class Router extends Main
 		$this->status = '404';
 		$t_dirpath = APP_ROOT_DIR . '/app/views/';
 		$siteConfig = new siteConfig();
-		$loader = new Twig_Loader_Filesystem($t_dirpath);
-		$twig = new Twig_Environment($loader);
+		$loader = new \Twig_Loader_Filesystem($t_dirpath);
+		$twig = new \Twig_Environment($loader);
 		echo $twig->render('__skeleton/header.tpl', $siteConfig->getHeaderConfig());
 		$this->printError($msg);
 		echo $twig->render('__skeleton/footer.tpl', $siteConfig->getFooterConfig());
