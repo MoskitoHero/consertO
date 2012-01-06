@@ -1,5 +1,5 @@
-*{margin:0;color:#663E29;font-family:Myriad Pro, Verdana;font-size:14;}
-body{width:100%;background-color:#E9E7CF;}
+*{margin:0;}
+body{width:100%;background-color:#E9E7CF;color:#663E29;font-family:Myriad Pro, Verdana;font-size:14;}
 h1{font-size:18px;}
 hr{height:10px;width:750px;background-image:url('../images/line_02.png');background-repeat:no-repeat;margin-bottom:20px;margin-top:20px;border:none;}
 #wrapper{width:750px;margin:0 auto 0 auto;}

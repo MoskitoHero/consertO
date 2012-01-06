@@ -4,10 +4,18 @@
 */
 namespace base;
 
-class controller
+class controller extends Main
+
 {
 	public $status;
 	
+	function loadComponents($components){
+		if (!empty($components)) {
+			foreach ($components as $Class => $obj) {
+				$this->$obj = new $Class();
+			}
+		}
+	}
 	
 	function index() {
 	}

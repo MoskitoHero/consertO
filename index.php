@@ -16,7 +16,7 @@ spl_autoload_extensions('.class.php');
 spl_autoload_register();
 
 /// Get site Config
-$siteConfig = new siteConfig();
+$siteConfig = new base\siteConfig();
 $config = $siteConfig->getGlobalConfig();
 
 /// Load Twig

@@ -1,23 +1,22 @@
 <?php
-
-//var_dump($_SERVER);
-
 // Init Classes
-$appSession = new Session();
-//$appSession->unsetVar($var["r"]);
-//$appSession->dump();
-$appRouter = new Router();
-$auth = new Auth();
-$link = new Link();
+$appSession = new base\Session();
+$appRouter = new base\Router();
+$auth = new base\Auth();
+$link = new base\Link();
 
 // Check user Auth
-$auth->getUserRights($appRouter->access_lvl);
+//$auth->getUserRights($appRouter->access_lvl);
 
 // Go !!!
 $appRouter->callUpRoute();
 
 // Debug information
+$debug=true;
 if ($debug) {
-	$debug_dump['Router'] = $appRouter->debugRoute();
+	$appSession->dump();
+	$appRouter->dump();
+	$auth->dump();
+	$link->dump();
 }
 ?>

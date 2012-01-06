@@ -6,13 +6,18 @@ namespace root;
 
 class loginController extends \base\Controller
 {
+	public $components = array(
+		"base\Auth" => "auth",
+		"base\Session" => "session",
+		"base\Link" => "link"
+	);
 	
 	function index()
 	{
-		if ( \Auth::sessionStarted() == false ) {
-		    return(array("form_url" =>  \Link::build('login', 'login')) );
+		if ( $this->auth->sessionStarted() == false ) {
+		    return(array("form_url" =>  $this->link->build('login', 'login')) );
 		} else {
-			\Auth::driveOut();
+			$this->auth->driveOut();
 		}
 	}
 	
@@ -21,11 +26,11 @@ class loginController extends \base\Controller
 			unset($params['submit']);
 			$all = \R::getAll( 'select * from user WHERE username = ? ', array($params['username']) );
 			if ( crypt( $params['pass'], $all[0]["pass"]) == $all[0]["pass"] ) { 
-				\Auth::login($all[0]["id"],$all[0]["lvl"]);
-				\Auth::driveOut();
+				$this->auth->login($all[0]["id"],$all[0]["lvl"]);
+				$this->auth->driveOut();
 			} else { 
-				$_SESSION["notice"] = "bad credentials";
-				\Auth::driveOut('login');
+				$this->session->setVar("notice", "bad credentials");
+				$this->auth->driveOut('login');
 			}
 	}
 	
@@ -35,7 +40,7 @@ class loginController extends \base\Controller
 			if ( strlen($params['pass']) > 5 && $params['pass'] === $params['pass_confirm']) {
 				$all = \R::getAll( 'select * from user WHERE username = ? ', array($params['username']) );
 				if ( !empty($all) ) {
-				$_SESSION["notice"] =  "user already exists";
+				$this->session->setVar("notice", "user already exists");
 				return array();
 				} else {
 					unset($params['pass_confirm']);
@@ -44,24 +49,23 @@ class loginController extends \base\Controller
 					$user->pass = crypt($params['pass']);
 					$user->lvl = $params['lvl'];
 					$id = \R::store($user);
-					$_SESSION["notice"] = "user account created";
+					$this->session->setVar("notice", "user account created");
 					return array();
 				}
 			} else {
-				$_SESSION["notice"] = "passwords don't match or password is too short<br/>
-										<a href=' ".
-										\Link::build('login', 'register')
-										."'>Try again.</a>";
+				$this->session->setVar("notice", "passwords don't match or password is too short<br/>"
+										. $this->link->buildHtmlLink("Try again.", array(), 'login', 'register')
+										);
 				return array();
 			}
 	}
 	
 	function register()
 	{
-		if ( \Auth::sessionStarted() == false ) {
-		    return(array("form_url" =>  \Link::build('login', 'create')) );
+		if ( $this->auth->sessionStarted() == false ) {
+		    return(array("form_url" =>  $this->link->build('login', 'create')) );
 		} else {
-			\Auth::driveOut();
+			$this->auth->driveOut();
 		}
 	}
 }
