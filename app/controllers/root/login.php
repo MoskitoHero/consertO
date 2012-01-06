@@ -2,7 +2,7 @@
 /**
 * 
 */
-namespace root;
+namespace base\root;
 
 class loginController extends \base\Controller
 {
@@ -14,9 +14,13 @@ class loginController extends \base\Controller
 	
 	function index()
 	{
-		if ( $this->auth->sessionStarted() == false ) {
-		    return(array("form_url" =>  $this->link->build('login', 'login')) );
-		} else {
+		if ( $this->session->var->session_exists != 1 ) {
+		    return( array(
+				"form_url" => $this->link->build('login', 'login'),
+				"register_link" => $this->link->buildHtmlLink('register today',array(),'login', 'register')
+				) );
+		} 
+		if ( $this->session->var->session_exists == 1 ) {
 			$this->auth->driveOut();
 		}
 	}
