@@ -2,7 +2,7 @@
 <html>
 <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>{{module}} | {{website_title}}</title>
+        <title>{{current_page}} | {{website_title}}</title>
 {% for source in css %}
 <link type="text/css" rel="stylesheet" media="screen" href="{{source}}"></link>
 {% endfor %}
@@ -33,4 +33,7 @@
 	</div>
 	<hr/>
 </header>
+{% if notice %}
+<div id="notice" class="rounded-corners-10">{{notice|raw}}</div>
+{% endif %}
 <div id="main">

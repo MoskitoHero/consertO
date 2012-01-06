@@ -1,5 +1,6 @@
 *{margin:0;color:#663E29;font-family:Myriad Pro, Verdana;font-size:14;}
 body{width:100%;background-color:#E9E7CF;}
+h1{font-size:18px;}
 hr{height:10px;width:750px;background-image:url('../images/line_02.png');background-repeat:no-repeat;margin-bottom:20px;margin-top:20px;border:none;}
 #wrapper{width:750px;margin:0 auto 0 auto;}
 header{margin-top:10px;clear:both;}
@@ -13,9 +14,5 @@ footer{font-size:0.6em;color:#663E29;text-align:center;bottom:0px;}
 #login{color:#eee;width:400px;margin:0 auto 0 auto;text-align:center;padding-top:6px;background-color:#0082B5}
 form dt{color:#eee;margin:0 10px 0;text-align:left;}
 input{width:370px;margin:0 auto 0 auto;margin:10px;padding:3px;font-size:16px;background-color:#ededed;text-align:center;color:#002838;}
-.rounded-corners-10 {
-     -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -khtml-border-radius: 10px;
-    border-radius: 10px;
-}
+.rounded-corners-10 {-moz-border-radius:10px;-webkit-border-radius:10px;-khtml-border-radius:10px;border-radius:10px;}
+#notice{margin: 0 auto 0 auto;color: #EEE;text-align: center;width: 600px;background-color: #005681;padding: 6px;;}

@@ -3,7 +3,7 @@
 	 	"website_title": "Skin&Bones",
 		"website_url": "http://localhost/~ced/Skin-Bones/",
 		"menu": [
-		 	{"name": "Accueil", "link": ""},
+		 	{"name": "Home", "link": ""},
 			{"name": "Blog", "link": "blog/"},
 			{"name": "Admin", "link": "admin/"}
 		]
