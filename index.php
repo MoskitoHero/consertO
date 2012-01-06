@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 /// Work out the URL
 function url(){
 	$pr = $_SERVER['HTTPS'] ? "https" : "http";
@@ -45,5 +43,4 @@ if ($config["debug"]){
 	print_r($debug_dump);
 	echo "</pre></div>";
 }
-
 ?>

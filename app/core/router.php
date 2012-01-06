@@ -1,5 +1,11 @@
 <?php
+
+//var_dump($_SERVER);
+
 // Init Classes
+$appSession = new Session();
+//$appSession->unsetVar($var["r"]);
+//$appSession->dump();
 $appRouter = new Router();
 $auth = new Auth();
 $link = new Link();

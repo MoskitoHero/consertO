@@ -5,30 +5,33 @@
 
 class siteConfig
 {
-	private $mainConfig; // object
-	private $jsonConfig;
-	private $globalConfig;
+	public $mainConfig; // object
+	public $jsonConfig;
+	public $globalConfig;
 	
 	function __construct()
 	{
 		//$this->mainConfig = simplexml_load_file(APP_ROOT_DIR .'/config/config.xml');
 		$json = file_get_contents(APP_ROOT_DIR .'/config/config.json');
 		$this->jsonConfig = json_decode($json);
+		$this->link = new Link();
+		$this->session = new Session();
 	}
 	
 	function getHeaderConfig(){
 		foreach ($this->jsonConfig->header as $k => $v){
 			$array[$k] = $v;
 		}
+		$array['current_page'] = $this->getCurrentRoutePrintedName();
 		$array['css'] = $this->getCssConfig();
 		$array['js'] = $this->getJsConfig();
 		if (\Auth::sessionStarted()) {
 			$array['logout'] = "true";
-			$array['logout_link'] = Link::build('logout');
+			$array['logout_link'] = $this->link->build('logout');
 			$array['login'] = "false";
 		} else {
 			$array['logout'] = "false";
-			$array['login_link'] = Link::build('login');
+			$array['login_link'] = $this->link->build('login');
 			$array['login'] = "true";
 		}
 		return $array;
@@ -70,6 +73,13 @@ class siteConfig
 			$this->globalConfig = $array;
 		}
 		return $this->globalConfig;
+	}
+	
+	function getCurrentRoutePrintedName() {
+		$m = ($this->session->route->module == "root")?"":$this->session->route->module . " ";
+		$c = ($this->session->route->controller == "default")?"":$this->session->route->controller;
+		$a = ($this->session->route->action == "index")?"":" :: " . $this->session->route->action;
+		return $m . $c . $a;
 	}
 }
 ?>

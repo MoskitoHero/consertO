@@ -18,7 +18,7 @@ class Router
 	
 	function __construct()
 	{
-		//$this->config = simplexml_load_file(APP_ROOT_DIR .'/config/routes.xml');
+		$this->session = new Session();
 		$json = file_get_contents(APP_ROOT_DIR .'/config/routes.json');
 		$this->jsonConfig = json_decode($json);
 		$base = str_replace('index.php','',$_SERVER['PHP_SELF']);
@@ -50,6 +50,11 @@ class Router
 		array_shift($this->current);
 		$this->id = ($this->current[0]=="")?"":$this->current[0];
 		$this->params = array_merge($this->current, $this->parseHttpMethod());
+		$this->session->setVar("route", 
+								array(	"module" => 	$this->module,
+								"controller" =>	$this->controller,
+								"action" => $this->action
+							) );
 	}
 	
 	function parseHttpMethod() {
