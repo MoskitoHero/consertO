@@ -98,7 +98,9 @@ class Router
 		$v_filepath = APP_ROOT_DIR . '/app/views/' . $this->module . '/' . $this->controller . '/' . $this->action . '.tpl';
 		if (file_exists($c_filepath)){
 			require_once($c_filepath);
-			$controller_array = call_user_func( $this->module . '\\' . $this->controller . 'Controller::' . $this->action , $this->params);
+			$classname = $this->module . '\\' . $this->controller . 'Controller';
+			$this->c = new $classname();
+			$controller_array = call_user_func( array( $this->c, $this->action ), $this->params );
 			if (file_exists($v_filepath)){
 				$t_dirpath = APP_ROOT_DIR . '/app/views/';
 				$t_filename = $this->module . '/' . $this->controller . '/' . $this->action . ".tpl";
@@ -125,8 +127,14 @@ class Router
 	
 	function create404($msg="") {
 		$this->status = '404';
+		$t_dirpath = APP_ROOT_DIR . '/app/views/';
+		$siteConfig = new siteConfig();
+		$loader = new Twig_Loader_Filesystem($t_dirpath);
+		$twig = new Twig_Environment($loader);
+		echo $twig->render('__skeleton/header.tpl', $siteConfig->getHeaderConfig());
 		$this->printError($msg);
-		return false;
+		echo $twig->render('__skeleton/footer.tpl', $siteConfig->getFooterConfig());
+		return true;
 	}
 }
 ?>
