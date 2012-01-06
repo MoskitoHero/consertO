@@ -30,7 +30,7 @@ class Link extends Main
 		foreach ( $options as $k => $v ) {
 			$opt .= $k . "=\"" . $v . "\" ";
 		}
-		$return = "<a " . $opt . ">" . $text . "</a>";
+		$return = "<a href=\"" . $link . "\"" . $opt . ">" . $text . "</a>";
 		return $return;
 	}
 }
