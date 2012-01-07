@@ -7,7 +7,8 @@ namespace base;
 
 class Link extends Main
 
-{
+{	
+	private static $instance;
 	
 	function build($module=null, $controller=null, $action=null, $params=array())
 	{
@@ -33,6 +34,26 @@ class Link extends Main
 		$return = "<a href=\"" . $link . "\"" . $opt . ">" . $text . "</a>";
 		return $return;
 	}
+	public static function singleton()
+    {
+        if (!isset(self::$instance)) {
+            //echo 'Creating new instance of : ';
+            $className = __CLASS__;
+            //echo $className;
+            self::$instance = new $className;
+        }
+        return self::$instance;
+    }
+    
+    public function __clone()
+    {
+        trigger_error('Clone is not allowed.', E_USER_ERROR);
+    }
+
+    public function __wakeup()
+    {
+        trigger_error('Unserializing is not allowed.', E_USER_ERROR);
+    }
 }
 
 ?>

@@ -12,7 +12,7 @@ class Controller extends Main
 	function loadComponents($components){
 		if (!empty($components)) {
 			foreach ($components as $Class => $obj) {
-				$this->$obj = new $Class();
+				$this->$obj = $Class::singleton();
 			}
 		}
 	}
@@ -40,6 +40,14 @@ class Controller extends Main
 	public static function __callStatic($name, $arguments) {
 		//echo "Calling static method '$name' " . implode(', ', $arguments). "\n";
 		return false;
+	}
+	
+	function slug($str)
+	{
+		$str = strtolower(trim($str));
+		$str = preg_replace('/[^a-z0-9-]/', '-', $str);
+		$str = preg_replace('/-+/', "-", $str);
+		return $str;
 	}
 }
 ?>

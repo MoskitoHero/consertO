@@ -6,14 +6,27 @@ namespace base\root;
 
 class blogController extends \base\Controller
 {	
+	public $components = array(
+						"base\Link" => "link",
+						"base\Session" => "session",
+						"base\Paginator" => "paginator"
+						);
+
 	function index(){
-		$r["blogs"] = \R::$f->begin()->select('*')->from('blog')->limit('10')->get();
+		$lnk = $this->link->build('root','blog');
+		$id = $this->session->var->route["id"];
+		$this->paginator->init( $lnk , $id, 'blog', 3 );
+		$r["blogs"] = \R::getAll("SELECT * FROM blog ORDER BY `id` DESC LIMIT " . $this->paginator->limit);
+		foreach ($r["blogs"] as $k => $v) {
+			$r["blogs"][$k]["lnk"] = $this->link->build('','blog', 'view', array($v["slug"]));
+		}
+		$r["pagination"] = $this->paginator->paginate();
 		return $r;	
 	}
 	
 	function view($params)
 	{
-		$r = \R::$f->begin()->select('*')->from('blog')->where('id = ? ')->put($params[0])->get();
+		$r = \R::$f->begin()->select('*')->from('blog')->where('slug = ? ')->put($params[0])->get();
 		$r["article"] = $r[0];
 		unset ($r[0]);
 		return $r;

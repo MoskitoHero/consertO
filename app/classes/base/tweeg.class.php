@@ -12,7 +12,7 @@ class Tweeg extends \Twig_Extension
 	public function eraseNotice()
 	{
 		$this->session = new \base\Session();
-		if ($_SERVER["REQUEST_METHOD"]==GET){
+		if ($this->session->var->route["method"] == "GET" ){
 			$this->session->unsetVar("notice");
 		}
 	}

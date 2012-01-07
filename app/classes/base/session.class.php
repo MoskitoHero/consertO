@@ -8,6 +8,7 @@ namespace base;
 class Session extends Main
 
 {
+	private static $instance;
 
 	public $var;
 	
@@ -66,6 +67,28 @@ class Session extends Main
 		}
 		return false;
 	}
+	
+	public static function singleton()
+    {
+        if (!isset(self::$instance)) {
+            //echo 'Creating new instance of : ';
+            $className = __CLASS__;
+            //echo $className;
+            self::$instance = new $className;
+        }
+        return self::$instance;
+    }
+    
+    public function __clone()
+    {
+        trigger_error('Clone is not allowed.', E_USER_ERROR);
+    }
+
+    public function __wakeup()
+    {
+        trigger_error('Unserializing is not allowed.', E_USER_ERROR);
+    }
+	
 }
 
 ?>

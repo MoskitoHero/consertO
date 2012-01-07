@@ -8,8 +8,11 @@ namespace base;
 class Auth extends Main
 
 {
+
+	private static $instance;
+	
 	function __construct() {
-		$this->session = new Session();
+		$this->session = \base\Session::singleton();
 	}
 	
 	function sessionStarted()
@@ -35,8 +38,8 @@ class Auth extends Main
 			if ( $this->sessionStarted() ) {
 				 //echo "Visitor is a user";
 				// Let's check he's allowed to access this area
-				$u_lvl = $this->session->u_lvl;
-				$id = $this->session->u_id;
+				$u_lvl = $this->session->var->u_lvl;
+				$id = $this->session->var->u_id;
 				$user = \R::load('user', $id);
 				if (!$user->id) { //echo  "user not found";
 					$this->driveOut('');
@@ -74,5 +77,26 @@ class Auth extends Main
 		$this->session->setVar("u_lvl",$u_lvl);
 		$this->session->setVar("u_id",$u_id);
 	}
+	
+	public static function singleton()
+    {
+        if (!isset(self::$instance)) {
+            //echo 'Creating new instance of : ';
+            $className = __CLASS__;
+            //echo $className;
+            self::$instance = new $className;
+        }
+        return self::$instance;
+    }
+    
+    public function __clone()
+    {
+        trigger_error('Clone is not allowed.', E_USER_ERROR);
+    }
+
+    public function __wakeup()
+    {
+        trigger_error('Unserializing is not allowed.', E_USER_ERROR);
+    }
 }
 ?>

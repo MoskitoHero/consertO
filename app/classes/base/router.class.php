@@ -19,15 +19,22 @@ class Router extends Main
 	public $status;
 	public $method; // GET, POST, PUT, DELETE
 	
+	private static $instance;
+	
 	function __construct()
 	{
-		$this->session = new Session();
+		$this->session = Session::singleton();
 		$json = file_get_contents(APP_ROOT_DIR .'/config/routes.json');
 		$this->jsonConfig = json_decode($json);
 		$base = str_replace('index.php','',$_SERVER['PHP_SELF']);
-		$str_path = str_replace($base,'',$_SERVER['REQUEST_URI']);
+		if($base!="/"){
+			$str_path = str_replace($base,'',$_SERVER['REQUEST_URI']);
+		} else {
+			$str_path = $_SERVER['REQUEST_URI'];
+		}
 		$str_path = str_replace('?' . $_SERVER['REDIRECT_QUERY_STRING'],'',$str_path);
 		$this->current = explode('/',$str_path);
+		//print_r($this->current);
 		$this->ssl = false;
 		foreach ($this->jsonConfig->routes as $r=>$v){
 			if ($this->current[0] == $v->path){
@@ -50,13 +57,23 @@ class Router extends Main
 		$this->controller = ($this->current[0]=="")?"default":$this->current[0];
 		array_shift($this->current);
 		$this->action = ($this->current[0]=="")?"index":$this->current[0];
-		array_shift($this->current);
-		$this->id = ($this->current[0]=="")?"":$this->current[0];
+		if (preg_match('/\d/',$this->action) != 0) {
+			$this->id = $this->action;
+			$this->action = "index";
+			array_shift($this->current);
+		} else {
+			array_shift($this->current);
+			$this->id = ($this->current[0]=="")?"":$this->current[0];
+		}
 		$this->params = array_merge($this->current, $this->parseHttpMethod());
+		if ($this->action=="delete"){$this->method = "DELETE";}
+		if ($this->action=="update"){$this->method = "PUT";}
 		$this->session->setVar("route", 
 								array(	"module" => 	$this->module,
 								"controller" =>	$this->controller,
-								"action" => $this->action
+								"action" => $this->action,
+								"id" => $this->id,
+								"method" => $this->method
 							) );
 	}
 	
@@ -104,7 +121,7 @@ class Router extends Main
 			if (file_exists($v_filepath)){
 				$t_dirpath = APP_ROOT_DIR . '/app/views/';
 				$t_filename = $this->module . '/' . $this->controller . '/' . $this->action . ".tpl";
-				$siteConfig = new siteConfig();
+				$siteConfig = \base\siteConfig::singleton();
 				$loader = new \	Twig_Loader_Filesystem($t_dirpath);
 				$twig = new \Twig_Environment($loader);
 				$tweeg = new \base\Tweeg();
@@ -132,7 +149,7 @@ class Router extends Main
 	function create404($msg="") {
 		$this->status = '404';
 		$t_dirpath = APP_ROOT_DIR . '/app/views/';
-		$siteConfig = new siteConfig();
+		$siteConfig = \base\siteConfig::singleton();
 		$loader = new \Twig_Loader_Filesystem($t_dirpath);
 		$twig = new \Twig_Environment($loader);
 		echo $twig->render('__skeleton/header.tpl', $siteConfig->getHeaderConfig());
@@ -140,5 +157,26 @@ class Router extends Main
 		echo $twig->render('__skeleton/footer.tpl', $siteConfig->getFooterConfig());
 		return true;
 	}
+	
+	public static function singleton()
+    {
+        if (!isset(self::$instance)) {
+            //echo 'Creating new instance of : ';
+            $className = __CLASS__;
+            //echo $className;
+            self::$instance = new $className;
+        }
+        return self::$instance;
+    }
+    
+    public function __clone()
+    {
+        trigger_error('Clone is not allowed.', E_USER_ERROR);
+    }
+
+    public function __wakeup()
+    {
+        trigger_error('Unserializing is not allowed.', E_USER_ERROR);
+    }
 }
 ?>

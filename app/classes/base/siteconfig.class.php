@@ -12,14 +12,16 @@ class siteConfig extends Main
 	public $jsonConfig;
 	public $globalConfig;
 	
+	private static $instance;
+	
 	function __construct()
 	{
 		//$this->mainConfig = simplexml_load_file(APP_ROOT_DIR .'/config/config.xml');
 		$json = file_get_contents(APP_ROOT_DIR .'/config/config.json');
 		$this->jsonConfig = json_decode($json);
-		$this->link = new Link();
-		$this->session = new Session();
-		$this->auth = new Auth();
+		$this->link = \base\Link::singleton();
+		$this->session = \base\Session::singleton();
+		$this->auth = \base\Auth::singleton();
 	}
 	
 	function getHeaderConfig(){
@@ -85,5 +87,26 @@ class siteConfig extends Main
 		$a = ($this->session->route->action == "index")?"":" :: " . $this->session->route->action;
 		return $m . $c . $a;
 	}
+	
+	public static function singleton()
+    {
+        if (!isset(self::$instance)) {
+            //echo 'Creating new instance of : ';
+            $className = __CLASS__;
+            //echo $className;
+            self::$instance = new $className;
+        }
+        return self::$instance;
+    }
+    
+    public function __clone()
+    {
+        trigger_error('Clone is not allowed.', E_USER_ERROR);
+    }
+
+    public function __wakeup()
+    {
+        trigger_error('Unserializing is not allowed.', E_USER_ERROR);
+    }
 }
 ?>
