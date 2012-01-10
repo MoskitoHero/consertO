@@ -21,7 +21,9 @@ class blogController extends \base\Controller
 			$r["blogs"][$k]["lnk"] = $this->link->build('','blog', 'view', array($v["slug"]));
 		}
 		$r["pagination"] = $this->paginator->paginate();
-		return $r;	
+		echo $this->twig->render('root/blog/index.twig', $r);
+		return true;
+
 	}
 	
 	function view($params)
@@ -29,7 +31,8 @@ class blogController extends \base\Controller
 		$r = \R::$f->begin()->select('*')->from('blog')->where('slug = ? ')->put($params[0])->get();
 		$r["article"] = $r[0];
 		unset ($r[0]);
-		return $r;
+		echo $this->twig->render('root/blog/view.twig', $r);
+		return true;
 	}
 }
 

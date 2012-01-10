@@ -15,13 +15,11 @@
 <header>
 	<div id="header_img">
 		<a href="{{website_url}}">
-			<img src="http://localhost/~ced/Skin-Bones/assets/images/skin-bones-header-logo.png"/>
+			<img src="http://localhost/~ced/Skin-Bones/assets/images/logo.png"/>
 		</a>
 	</div>
-	<div id="menu">
-		{% for m in menu %}
-		<a href="{{website_url}}{{m.link}}">{{m.name}}</a>
-		{% endfor %}
+	<div id="top_menu">
+			{% include '__skeleton/menu.twig' %}
 	</div>
 	<div id="loginout">
 	{% if logout == "true" %}

@@ -9,23 +9,22 @@ class siteConfig extends Main
 
 {
 	public $mainConfig; // object
-	public $jsonConfig;
+	public $yamlConfig;
 	public $globalConfig;
 	
 	private static $instance;
 	
 	function __construct()
 	{
-		//$this->mainConfig = simplexml_load_file(APP_ROOT_DIR .'/config/config.xml');
-		$json = file_get_contents(APP_ROOT_DIR .'/config/config.json');
-		$this->jsonConfig = json_decode($json);
+		$yaml = new \base\yaml\sfYamlParser();
+		$this->yamlConfig = $yaml->parse(file_get_contents(APP_ROOT_DIR . '/config/config.yml'));
 		$this->link = \base\Link::singleton();
 		$this->session = \base\Session::singleton();
 		$this->auth = \base\Auth::singleton();
 	}
 	
 	function getHeaderConfig(){
-		foreach ($this->jsonConfig->header as $k => $v){
+		foreach ($this->yamlConfig["header"] as $k => $v){
 			$array[$k] = $v;
 		}
 		$array['current_page'] = $this->getCurrentRoutePrintedName();
@@ -40,26 +39,53 @@ class siteConfig extends Main
 			$array['login_link'] = $this->link->build('login');
 			$array['login'] = "true";
 		}
+		$array = $this->buildMenu($array);
+		return $array;
+	}
+	
+	function buildMenu($array)
+	{
+		switch ( $this->session->getVar('u_lvl') )
+		{
+			case 10:
+				break;
+			case 5:
+				unset($array['menu']['admin']);
+				break;
+			case 1:
+				unset($array['menu']['admin']);
+				unset($array['menu']['vip']);
+				break;
+			default:
+				unset($array['menu']['admin']);
+				unset($array['menu']['vip']);
+		}
 		return $array;
 	}
 	
 	function getFooterConfig(){
-		foreach ($this->jsonConfig->footer as $k => $v){
+		foreach ($this->yamlConfig["footer"] as $k => $v){
 			$array[$k] = $v;
+		}
+		if ($this->session->getVar("display_sidebar") == false) {
+			$array["display_sidebar"] = false;
+			echo "no sidebar";
+		} else {
+			$array["display_sidebar"] = true;
 		}
 		return $array;
 	}
 	
 	function getCssConfig(){
-		foreach ($this->jsonConfig->css as $k => $v){
-			$array[] = $this->getAssetURI($v->source, 'css');
+		foreach ($this->yamlConfig["header"]["css"] as $k => $v){
+			$array[] = $this->getAssetURI($v["source"], 'css');
 		}
 		return $array;
 	}
 	
 	function getJsConfig(){
-		foreach ($this->jsonConfig->js as $k => $v){
-			$array[] = $this->getAssetURI($v->source, 'js');
+		foreach ($this->yamlConfig["header"]["js"] as $k => $v){
+			$array[] = $this->getAssetURI($v["source"], 'js');
 		}
 		return $array;
 	}
@@ -73,7 +99,7 @@ class siteConfig extends Main
 	
 	function getGlobalConfig(){
 		if (!isset($this->globalConfig)) {
-			foreach ($this->jsonConfig->global as $k => $v){
+			foreach ($this->yamlConfig["global"] as $k => $v){
 				$array[$k] = $v;
 			}
 			$this->globalConfig = $array;

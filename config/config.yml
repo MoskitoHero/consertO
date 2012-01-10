@@ -1,0 +1,50 @@
+# YAML CONFIG FILE
+#
+# REMEMBER / NO TABS - INDENT BY 4 SPACES
+#
+#
+# config/config.yml
+#
+#
+# Settings for HEADER template
+header:
+    website_title: "Conserto"
+    website_url: http://localhost/~ced/Skin-Bones/
+    menu:
+        default:
+            home:
+                name: "Home"
+                link: ""
+            blog:
+                name: "Blog"
+                link: "blog/"
+        root:
+        vip:
+        admin:
+            admin_home:
+                name: "Admin Home"
+                link: "admin/"
+            admin_blog:
+                name: "Admin Blog"
+                link: "admin/blog/"
+    css:
+        - {source: "style.css"}
+    js:
+        - {source: "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"}
+        - {source: "jquery.noisy.min.js"}
+        - {source: "test.js"}
+
+# Settings for FOOTER template
+footer:
+    copyright_holder: "Cedric Delalande"
+    copyright_holder_url: "http://cedric.delalande.me/"
+    date: "2011-2012" 
+
+# GLOBAL Settings
+global:
+    debug: false
+    database:
+        server: "localhost"
+        dbname: "test"
+        user: "skull"
+        pass: "secret"

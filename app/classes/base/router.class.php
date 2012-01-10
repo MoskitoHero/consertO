@@ -24,8 +24,8 @@ class Router extends Main
 	function __construct()
 	{
 		$this->session = Session::singleton();
-		$json = file_get_contents(APP_ROOT_DIR .'/config/routes.json');
-		$this->jsonConfig = json_decode($json);
+		$yaml = new \base\yaml\sfYamlParser();
+		$this->yamlConfig = $yaml->parse(file_get_contents(APP_ROOT_DIR . '/config/routes.yml'));
 		$base = str_replace('index.php','',$_SERVER['PHP_SELF']);
 		if($base!="/"){
 			$str_path = str_replace($base,'',$_SERVER['REQUEST_URI']);
@@ -34,13 +34,12 @@ class Router extends Main
 		}
 		$str_path = str_replace('?' . $_SERVER['REDIRECT_QUERY_STRING'],'',$str_path);
 		$this->current = explode('/',$str_path);
-		//print_r($this->current);
 		$this->ssl = false;
-		foreach ($this->jsonConfig->routes as $r=>$v){
-			if ($this->current[0] == $v->path){
-				$this->module = $v->name;
-				$this->access_lvl = $v->security->access_lvl;
-				$this->ssl = $v->security->ssl;
+		foreach ($this->yamlConfig as $r=>$v){
+			if ($this->current[0] == $v["path"]){
+				$this->module = $r;
+				$this->access_lvl = $v["security"]["access_lvl"];
+				$this->ssl = $v["security"]["ssl"];
 				array_shift($this->current);
 			}
 		}
@@ -111,36 +110,41 @@ class Router extends Main
 	
 	function callUpRoute() {
 		$c_filepath = APP_ROOT_DIR . '/app/controllers/' . $this->module . '/' . $this->controller . '.php';
-		$v_filepath = APP_ROOT_DIR . '/app/views/' . $this->module . '/' . $this->controller . '/' . $this->action . '.tpl';
+		$v_filepath = APP_ROOT_DIR . '/app/views/' . $this->module . '/' . $this->controller . '/' . $this->action . '.twig';
 		if (file_exists($c_filepath)){
 			require_once($c_filepath);
 			$classname = 'base\\' . $this->module . '\\' . $this->controller . 'Controller';
 			$this->c = new $classname();
 			$this->c->loadComponents($this->c->components);
-			$controller_array = call_user_func( array( $this->c, $this->action ), $this->params );
-			if (file_exists($v_filepath)){
+			if (file_exists($v_filepath)) { 
+				// We've got a view for this !
+				$this->session->setVar("display_sidebar", true); // display the sidebar by defaut
 				$t_dirpath = APP_ROOT_DIR . '/app/views/';
-				$t_filename = $this->module . '/' . $this->controller . '/' . $this->action . ".tpl";
+				$t_filename = $this->module . '/' . $this->controller . '/' . $this->action . ".twig";
 				$siteConfig = \base\siteConfig::singleton();
 				$loader = new \	Twig_Loader_Filesystem($t_dirpath);
 				$twig = new \Twig_Environment($loader);
 				$tweeg = new \base\Tweeg();
 				$twig->addExtension(new \base\Tweeg());
 				$twig->addFunction('erase_notice', new \Twig_Function_Method($tweeg, 'eraseNotice'));
-				echo $twig->render('__skeleton/header.tpl', $siteConfig->getHeaderConfig());
-				echo $twig->render('__skeleton/notice.tpl', array("notice" =>  $_SESSION["notice"]) );
-				if (!empty($controller_array)){
-					echo $twig->render($t_filename, $controller_array);
-				} else {
-					echo $twig->render($t_filename);
-				}
-				echo $twig->render('__skeleton/footer.tpl', $siteConfig->getFooterConfig());
-			} 	else {
-					$this->create404("View doesn't exist in filesystem. Please create one here: " . $v_filepath);
-					return false;
-				}
+				$twig->addFunction('show_sidebar', new \Twig_Function_Method($tweeg, 'showSidebar'));
+				echo $twig->render('__skeleton/header.twig', $siteConfig->getHeaderConfig());
+				echo $twig->render('__skeleton/notice.twig', array("notice" =>  $_SESSION["notice"]) );
+				call_user_func( array( $this->c, $this->action ), $this->params );
+				echo $twig->render('__skeleton/footer.twig', $siteConfig->getFooterConfig());
+			} else {
+				// No view for this controller. Just extecute it. No need to add header, footer, etc.
+				call_user_func( array( $this->c, $this->action ), $this->params );
+			}
 		} else {
-			$this->create404("Controller doesn't exist in filesystem. Please create one here: " . $c_filepath);
+			$siteConfig = \base\siteConfig::singleton();
+			$config = $siteConfig->getGlobalConfig();
+			print_r($config);
+			if ($config["debug"]) {
+				$this->create404("Controller doesn't exist in filesystem. Please create one here: " . $c_filepath);
+			} else {
+				$this->create404("Page doesn't exist");
+			}
 			return false;
 		}
 		return true;
@@ -152,9 +156,9 @@ class Router extends Main
 		$siteConfig = \base\siteConfig::singleton();
 		$loader = new \Twig_Loader_Filesystem($t_dirpath);
 		$twig = new \Twig_Environment($loader);
-		echo $twig->render('__skeleton/header.tpl', $siteConfig->getHeaderConfig());
+		echo $twig->render('__skeleton/header.twig', $siteConfig->getHeaderConfig());
 		$this->printError($msg);
-		echo $twig->render('__skeleton/footer.tpl', $siteConfig->getFooterConfig());
+		echo $twig->render('__skeleton/footer.twig', $siteConfig->getFooterConfig());
 		return true;
 	}
 	

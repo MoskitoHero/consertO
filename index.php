@@ -16,6 +16,7 @@ spl_autoload_extensions('.class.php');
 spl_autoload_register();
 
 /// Get site Config
+//require_once APP_ROOT_DIR . '/lib/Yaml/sfYaml.php';
 $siteConfig = \base\siteConfig::singleton();
 $config = $siteConfig->getGlobalConfig();
 
@@ -25,10 +26,10 @@ Twig_Autoloader::register();
 
 /// Load Redbean
 require_once(APP_ROOT_DIR . '/lib/RedBeanPHP/RedBean/redbean.class.php');
-R::setup('mysql:host=' . $config["database"]->server . 
-			';dbname=' . $config["database"]->dbname,
-			$config["database"]->user , 
-			$config["database"]->pass 
+R::setup('mysql:host=' . $config["database"]["server"] . 
+			';dbname=' . $config["database"]["dbname"],
+			$config["database"]["user"] , 
+			$config["database"]["pass"] 
 		);
 
 // Load base controller class
@@ -39,8 +40,9 @@ require_once('app/core/router.php');
 
 /// Print out debug data if set to true in config.
 if ($config["debug"]){
-	echo "<div id='WinterBreezeDebug'><pre>";
-	print_r($debug_dump);
+	echo "<div id='AppDebug'><pre>";
+	// Debug information
+	print_r($GLOBALS);
 	echo "</pre></div>";
 }
 ?>

@@ -17,6 +17,12 @@ class Tweeg extends \Twig_Extension
 		}
 	}
 	
+	public function showSidebar()
+	{
+		$sidebar = new \base\sidebar();
+		return $sidebar->get();
+	}
+	
 }
 
 ?>

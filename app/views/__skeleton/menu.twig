@@ -1,0 +1,26 @@
+<ul class="menu_main">
+{% if menu.default %}
+	{% for m in menu.default %}
+		<li><a href="{{website_url}}{{m.link}}">{{m.name}}</a></li>
+	{%endfor %}
+{% endif %}
+{% if menu.root %}
+	{% for m in menu.root %}
+		<li><a href="{{website_url}}{{m.link}}">{{m.name}}</a></li>
+	{%endfor %}
+{% endif %}
+</ul>
+<ul class="menu_vip">
+{% if menu.vip %}
+	{% for m in menu.vip %}
+		<li><a href="{{website_url}}{{m.link}}">{{m.name}}</a></li>
+	{%endfor %}
+{% endif %}
+</ul>
+<ul class="menu_admin">
+{% if menu.admin %}
+	{% for m in menu.admin %}
+		<li><a href="{{website_url}}{{m.link}}">{{m.name}}</a></li>
+	{%endfor %}
+{% endif %}
+</ul>

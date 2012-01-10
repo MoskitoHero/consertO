@@ -9,7 +9,8 @@ class defaultController extends \base\Controller
 	
 	function index()
 	{
-		return array('name' => 'joe', 'chien'=> 'doberman');
+		echo $this->twig->render('root/default/index.twig');
+		return true;
 	}
 	
 }

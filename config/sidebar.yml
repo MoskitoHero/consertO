@@ -1,0 +1,36 @@
+menu: true
+default:
+    before:
+        search:
+            active: true
+            type: search
+    after:
+        liens:
+            active: true
+            type: links
+            title: "These are the links, man"
+            "google":
+                name: "Visit Google.com"
+                link: "http://www.google.com/"
+            "flashpass":
+                name: "Flashpass.fr"
+                link: "www.flashpass.fr"
+        texte:
+            active: true
+            type: text
+            title: "Here comes some text"
+            content: >
+                This is some arbitrary text.<br/>
+                It could be veeeery long and multi-line, 
+                with <strong>styling</strong> and <a href="http://cedric.delalande.me">links</a><br/>
+                This is all defined statically in config/sidebar.yml. 
+                Later, I'll get it to act depending on which section of the site you're in
+                
+        GA:
+            active: true
+            type: google_analytics
+            code: "UA-21604043-1"
+root:
+vip:
+admin:
+    

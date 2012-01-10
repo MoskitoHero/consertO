@@ -25,7 +25,8 @@ class blogController extends \base\Controller
 			$r["add_url"] = $this->link->build('admin','blog','add');			
 		}
 		$r["pagination"] = $this->paginator->paginate();
-		return $r;	
+		echo $this->twig->render('admin/blog/index.twig', $r);
+		return true;	
 	}
 	
 	function view($params)
@@ -36,7 +37,8 @@ class blogController extends \base\Controller
 		$r["edit_url"] = $this->link->build('admin','blog','edit',array("id" => $params[0]));
 		$r["delete_url"] = $this->link->build('admin','blog','delete',array("id" => $params[0]));
 		$r["add_url"] = $this->link->build('admin','blog','add');
-		return $r;
+		echo $this->twig->render('admin/blog/view.twig', $r);
+		return true;
 	}
 	
 	function edit($params)
@@ -45,7 +47,9 @@ class blogController extends \base\Controller
 		$r["article"] = $r[0];
 		unset ($r[0]);
 		$r["form_url"] = $this->link->build('admin','blog','update',$params);
-		return $r;
+		$this->session->setVar("display_sidebar", false);
+		echo $this->twig->render('admin/blog/edit.twig', $r);
+		return true;
 	}
 	
 	function update($params)
@@ -67,7 +71,10 @@ class blogController extends \base\Controller
 	function add()
 	{
 		$r_url = $this->link->build('admin','blog','create');
-		return array("form_url" => $r_url);
+		$r = array("form_url" => $r_url);
+		$this->session->setVar("display_sidebar", false);
+		echo $this->twig->render('admin/blog/add.twig', $r);
+		return true;
 	}
 	
 	function create($params)

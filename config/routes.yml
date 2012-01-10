@@ -1,0 +1,18 @@
+# YAML CONFIG FILE
+#
+# REMEMBER / NO TABS - INDENT BY 4 SPACES
+#
+#
+# config/routes.yml
+#
+#
+root:
+    path: ""
+    security:
+        ssl: false
+        access_lvl: 0
+admin:
+    path: "admin",
+    security:
+        ssl: true
+        access_lvl: 10

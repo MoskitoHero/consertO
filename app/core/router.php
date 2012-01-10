@@ -12,12 +12,4 @@ $auth->getUserRights($appRouter->access_lvl);
 
 // Go !!!
 $appRouter->callUpRoute();
-
-// Debug information
-$debug=false;
-if ($debug) {
-	echo '<pre>';
-	print_r($GLOBALS);
-	echo '</pre>';
-}
 ?>

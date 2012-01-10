@@ -15,10 +15,12 @@ class loginController extends \base\Controller
 	function index()
 	{
 		if ( $this->session->var->session_exists != 1 ) {
-		    return( array(
+		    $r = array(
 				"form_url" => $this->link->build('login', 'login'),
 				"register_link" => $this->link->buildHtmlLink('register today',array(),'login', 'register')
-				) );
+				);
+			echo $this->twig->render('root/login/index.twig', $r);
+			return true;	
 		} 
 		if ( $this->session->var->session_exists == 1 ) {
 			$this->auth->driveOut();
@@ -68,7 +70,8 @@ class loginController extends \base\Controller
 	function register()
 	{
 		if ( $this->auth->sessionStarted() == false ) {
-		    return(array("form_url" =>  $this->link->build('login', 'create')) );
+		    $r = array("form_url" =>  $this->link->build('login', 'create'));
+		    echo $this->twig->render('root/login/register.twig', $r);
 		} else {
 			$this->auth->driveOut();
 		}

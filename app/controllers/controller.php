@@ -15,6 +15,8 @@ class Controller extends Main
 				$this->$obj = $Class::singleton();
 			}
 		}
+		$this->loader = new \Twig_Loader_Filesystem(APP_ROOT_DIR . '/app/views/');
+		$this->twig = new \Twig_Environment($this->loader);
 	}
 	
 	function index() {
