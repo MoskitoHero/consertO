@@ -5,6 +5,10 @@
 
 namespace base;
 
+use \Symfony\HttpFoundation\Request;
+use \Symfony\HttpFoundation\Response;
+//use \Symfony\HttpFoundation\Session;
+
 class Router extends Main
 
 {
@@ -21,18 +25,13 @@ class Router extends Main
 	
 	private static $instance;
 	
-	function __construct()
+	function __construct($request)
 	{
 		$this->session = Session::singleton();
 		$yaml = new \base\yaml\sfYamlParser();
 		$this->yamlConfig = $yaml->parse(file_get_contents(APP_ROOT_DIR . '/config/routes.yml'));
-		$base = str_replace('index.php','',$_SERVER['PHP_SELF']);
-		if($base!="/"){
-			$str_path = str_replace($base,'',$_SERVER['REQUEST_URI']);
-		} else {
-			$str_path = $_SERVER['REQUEST_URI'];
-		}
-		$str_path = str_replace('?' . $_SERVER['REDIRECT_QUERY_STRING'],'',$str_path);
+		$this->request = $request;
+		$str_path = $request->getPathInfo();
 		$this->current = explode('/',$str_path);
 		$this->ssl = false;
 		foreach ($this->yamlConfig as $r=>$v){
@@ -123,7 +122,7 @@ class Router extends Main
 				$t_filename = $this->module . '/' . $this->controller . '/' . $this->action . ".twig";
 				$siteConfig = \base\siteConfig::singleton();
 				$loader = new \	Twig_Loader_Filesystem($t_dirpath);
-				$twig = new \Twig_Environment($loader);
+				$twig = new \Twig_Environment($loader, array('cache' => APP_ROOT_DIR . '/var/cache'));
 				$tweeg = new \base\Tweeg();
 				$twig->addExtension(new \base\Tweeg());
 				$twig->addFunction('erase_notice', new \Twig_Function_Method($tweeg, 'eraseNotice'));
@@ -139,7 +138,6 @@ class Router extends Main
 		} else {
 			$siteConfig = \base\siteConfig::singleton();
 			$config = $siteConfig->getGlobalConfig();
-			print_r($config);
 			if ($config["debug"]) {
 				$this->create404("Controller doesn't exist in filesystem. Please create one here: " . $c_filepath);
 			} else {
@@ -151,24 +149,29 @@ class Router extends Main
 	}
 	
 	function create404($msg="") {
-		$this->status = '404';
+		$response = new \Symfony\Component\HttpFoundation\Response('', 404, array('Content-Type' => 'text/html'));
+		$response->send();
 		$t_dirpath = APP_ROOT_DIR . '/app/views/';
 		$siteConfig = \base\siteConfig::singleton();
 		$loader = new \Twig_Loader_Filesystem($t_dirpath);
-		$twig = new \Twig_Environment($loader);
+		$twig = new \Twig_Environment($loader, array('cache' => APP_ROOT_DIR . '/var/cache'));
+		$tweeg = new \base\Tweeg();
+		$twig->addExtension(new \base\Tweeg());
+		$twig->addFunction('erase_notice', new \Twig_Function_Method($tweeg, 'eraseNotice'));
+		$twig->addFunction('show_sidebar', new \Twig_Function_Method($tweeg, 'showSidebar'));
 		echo $twig->render('__skeleton/header.twig', $siteConfig->getHeaderConfig());
 		$this->printError($msg);
 		echo $twig->render('__skeleton/footer.twig', $siteConfig->getFooterConfig());
 		return true;
 	}
 	
-	public static function singleton()
+	public static function singleton($request)
     {
         if (!isset(self::$instance)) {
             //echo 'Creating new instance of : ';
             $className = __CLASS__;
             //echo $className;
-            self::$instance = new $className;
+            self::$instance = new $className($request);
         }
         return self::$instance;
     }

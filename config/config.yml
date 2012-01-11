@@ -9,7 +9,9 @@
 # Settings for HEADER template
 header:
     website_title: "Conserto"
-    website_url: http://localhost/~ced/Skin-Bones/
+    website_url: http://localhost/~ced/conserto/
+    website_description: "A dead-simple, easy PHP Framework"
+    website_locale: en_US
     menu:
         default:
             home:

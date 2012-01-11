@@ -1,6 +1,18 @@
-<?php 
-
+<?php
 namespace base;
+
+
+set_include_path(dirname(__FILE__).'/app/classes/');
+spl_autoload_extensions('.class.php,.php');
+spl_autoload_register();
+
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+$request = Request::createFromGlobals();
+echo $request->getPathInfo();
+$response = new Response('Not Found', 404, array('Content-Type' => 'text/plain'));
+$response->send();
 
 Class App
 {

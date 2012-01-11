@@ -12,13 +12,19 @@ define ('DS', '/');
 
 /// Include paths for Autoload
 set_include_path(dirname(__FILE__).'/app/classes/');
-spl_autoload_extensions('.class.php');
+spl_autoload_extensions('.class.php,.php');
 spl_autoload_register();
 
 /// Get site Config
 //require_once APP_ROOT_DIR . '/lib/Yaml/sfYaml.php';
 $siteConfig = \base\siteConfig::singleton();
 $config = $siteConfig->getGlobalConfig();
+
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+$request = Request::createFromGlobals();
+$response = new Response();
 
 /// Load Twig
 require_once APP_ROOT_DIR . '/lib/Twig/Autoloader.php';

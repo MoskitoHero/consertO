@@ -3,7 +3,7 @@
 
 // Init Classes
 $appSession = \base\Session::singleton();
-$appRouter = \base\Router::singleton();
+$appRouter = \base\Router::singleton($request);
 $auth = \base\Auth::singleton();
 $link = new base\Link();
 

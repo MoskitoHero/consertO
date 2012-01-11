@@ -16,7 +16,7 @@ class Controller extends Main
 			}
 		}
 		$this->loader = new \Twig_Loader_Filesystem(APP_ROOT_DIR . '/app/views/');
-		$this->twig = new \Twig_Environment($this->loader);
+		$this->twig = new \Twig_Environment($this->loader, array('cache' => APP_ROOT_DIR . '/var/cache'));
 	}
 	
 	function index() {

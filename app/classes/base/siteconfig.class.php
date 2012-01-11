@@ -60,7 +60,33 @@ class siteConfig extends Main
 				unset($array['menu']['admin']);
 				unset($array['menu']['vip']);
 		}
+		$base = str_replace('index.php','',$_SERVER['PHP_SELF']);
+		if($base!="/"){
+			$str_path = str_replace($base,'',$_SERVER['REQUEST_URI']);
+		} else {
+			$str_path = $_SERVER['REQUEST_URI'];
+		}
+		$str_path = str_replace('?' . $_SERVER['REDIRECT_QUERY_STRING'],'',$str_path);
+		foreach($array["menu"] as $k => $v) {
+			if(is_array($v)){
+				foreach ($v as $vk => $vv){
+					if (strcmp($str_path, "/". $vv["link"]) === 0 || 
+						strcmp($str_path . "/", "/". $vv["link"]) === 0 ||
+						strcmp($str_path, $vv["link"]) === 0 || 
+						strcmp($str_path . "/", $vv["link"]) === 0 
+						){
+						$array["menu"][$k][$vk]["class"] = "active_menu_item";
+					} else {
+						$array["menu"][$k][$vk]["class"] = "menu_item";
+					}
+				}
+			}
+		}
 		return $array;
+	}
+	
+	function setCssClass() {
+		echo "yo";
 	}
 	
 	function getFooterConfig(){

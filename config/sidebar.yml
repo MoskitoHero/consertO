@@ -12,9 +12,11 @@ default:
             "google":
                 name: "Visit Google.com"
                 link: "http://www.google.com/"
+                target: "_blank"
             "flashpass":
                 name: "Flashpass.fr"
-                link: "www.flashpass.fr"
+                link: "http://www.flashpass.fr"
+                target: "_blank"
         texte:
             active: true
             type: text
@@ -33,4 +35,3 @@ default:
 root:
 vip:
 admin:
-    
