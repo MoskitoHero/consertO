@@ -54,12 +54,13 @@ class __TwigTemplate_fa028c854b2ea71a9ba4d712c23300a8 extends Twig_Template
     }
 
     // line 4
-    public function gettextarea($name = null, $value = null, $col = null)
+    public function gettextarea($name = null, $value = null, $col = null, $class = null)
     {
         $context = array_merge($this->env->getGlobals(), array(
             "name" => $name,
             "value" => $value,
             "col" => $col,
+            "class" => $class,
         ));
 
         $blocks = array();
@@ -73,7 +74,11 @@ class __TwigTemplate_fa028c854b2ea71a9ba4d712c23300a8 extends Twig_Template
             echo "\" cols=\"";
             if (isset($context["size"])) { $_size_ = $context["size"]; } else { $_size_ = null; }
             echo twig_escape_filter($this->env, ((array_key_exists("size", $context)) ? (_twig_default_filter($_size_, 100)) : (100)), "html", null, true);
-            echo "\" class=\"textarea\">";
+            echo "\" class=\"";
+            if (isset($context["class"])) { $_class_ = $context["class"]; } else { $_class_ = null; }
+            if (isset($context["textarea"])) { $_textarea_ = $context["textarea"]; } else { $_textarea_ = null; }
+            echo twig_escape_filter($this->env, ((array_key_exists("class", $context)) ? (_twig_default_filter($_class_, $_textarea_)) : ($_textarea_)), "html", null, true);
+            echo "\">";
             if (isset($context["value"])) { $_value_ = $context["value"]; } else { $_value_ = null; }
             echo twig_escape_filter($this->env, $_value_);
             echo "</textarea>

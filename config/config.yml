@@ -33,8 +33,9 @@ header:
         - {source: "style.css"}
     js:
         - {source: "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"}
-        - {source: "jquery.noisy.min.js"}
-        - {source: "test.js"}
+        - {source: "/ckeditor/ckeditor.js"}
+        - {source: "/ckeditor/adapters/jquery.js"}
+        - {source: "basic.js"}
 
 # Settings for FOOTER template
 footer:

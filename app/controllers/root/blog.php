@@ -5,6 +5,7 @@
 namespace base\root;
 
 use Symfony\Component\HttpFoundation\Session;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class blogController extends \base\Controller
